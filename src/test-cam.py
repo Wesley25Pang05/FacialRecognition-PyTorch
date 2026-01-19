@@ -1,29 +1,16 @@
 import cv2
 import joblib
-import numpy as np
 from PIL import Image
-from torchvision import transforms
+from detect import detect_faces, label_face
 
-from detect import detect_faces
-from embeds import get_embedding
+classifier = joblib.load("face_svm.pkl")
+camera = cv2.VideoCapture(0)
 
-clf = joblib.load("face_svm.pkl")
-
-transform = transforms.Compose([
-    transforms.Resize((160, 160)),
-    transforms.ToTensor(),
-    transforms.Normalize([0.5], [0.5])
-])
-
-THRESHOLD = 0.85
-
-cap = cv2.VideoCapture(0)
-
-if not cap.isOpened():
+if not camera.isOpened():
     raise RuntimeError("Could not open webcam")
 
 while True:
-    ret, frame = cap.read()
+    ret, frame = camera.read()
     if not ret:
         break
 
@@ -37,17 +24,7 @@ while True:
             x1, y1, x2, y2 = map(int, box)
 
             face = pil_img.crop((x1, y1, x2, y2))
-            face_tensor = transform(face)
-
-            emb = get_embedding(face_tensor)
-
-            probs = clf.predict_proba(emb)[0]
-            best_idx = np.argmax(probs)
-            confidence = probs[best_idx]
-            label = clf.classes_[best_idx]
-
-            if confidence < THRESHOLD:
-                label = "Unknown"
+            label, confidence = label_face(face, classifier)
 
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
             cv2.putText(
@@ -60,10 +37,10 @@ while True:
                 2
             )
 
-    cv2.imshow("Face Recognition", frame)
+    cv2.imshow("Face Recognition Project", frame)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord('1'):
         break
 
-cap.release()
+camera.release()
 cv2.destroyAllWindows()

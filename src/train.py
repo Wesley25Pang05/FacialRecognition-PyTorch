@@ -1,5 +1,5 @@
 import os
-import numpy as np
+import numpy
 from PIL import Image
 from torchvision import transforms
 
@@ -46,7 +46,7 @@ for label in os.listdir("data/train"): # This goes through each person's folder
             labels.append(label)
 
 # Converts embeddings to a numpy array for sklearn
-embeddings = np.array(embeddings)
+embeddings = numpy.array(embeddings)
 
 # Train and save the SVM classifier for future use of this project
 clf = train_svm(embeddings, labels)
