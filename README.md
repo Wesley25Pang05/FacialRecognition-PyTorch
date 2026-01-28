@@ -1,4 +1,4 @@
-I created a facial recognition system with TensorFlow and deep learning. I implemented face detection and alignment, and extracted a previously trained CNN for facial embeddings and identities using an SVM. The main areas of the project were data cleaning, model inference, and the total machine learning workflow.
+I created a facial recognition system with TensorFlow and deep learning. I implemented face detection and alignment, and extracted a previously trained CNN for facial embeddings and identities using an SVM. The main areas of the project were data cleaning, model inference, and the total machine learning workflow. It uses images to train a model to recognize a user's face. Then, depending on which file you run, it can turn on your camera and draw rectangles around your face in real-time with the confidence level, indicating whether the person is recognized or Unknown. If your camera cannot be used, you can also upload files to edit all files in the test folder, achieving the same results without the rectangles.
 
 **Files:**
 
